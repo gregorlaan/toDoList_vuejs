@@ -24,7 +24,8 @@
         data() {
             return {
                 newItem: {},
-                list: []
+                list: [],
+                localList: this.getList()
             }
         },
         methods: {
@@ -37,12 +38,36 @@
                 };
                 e.preventDefault();
                 this.newItem.name = "";
+                this.updateList();
+                this.getList();
+
             },
             deleteItem: function(item) {
                 this.list.splice(this.list.indexOf(item), 1);
+                this.updateList();
+                this.getList();
+            },
+            checkList: function() {
+                if (localStorage.getItem("localList") === null) {
+                    this.list = [];
+                } else {
+                    this.list = JSON.parse(localStorage.getItem("localList"))
+                }
+            },
+            updateList: function() {
+               localStorage.setItem("localList", JSON.stringify(this.list)); 
+            },
+            getList: function() {
+                this.localList = JSON.parse(localStorage.getItem("localList"));
             }
+        },
+        computed: {
+        },
+        mounted: function() {
+            this.checkList();
         }
     }
+
 </script>
 
 <style scoped>
